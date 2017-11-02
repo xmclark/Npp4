@@ -78,5 +78,6 @@ bool openDocument(std::wstring& path);
 //
 // Your plugin command functions
 //
+std::wstring getCurrentFilePath();
 
 #endif //PLUGINDEFINITION_H

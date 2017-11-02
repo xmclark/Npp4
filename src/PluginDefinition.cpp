@@ -165,4 +165,14 @@ void writeToCurrentDocument()
 }
 
 {
+// get the current file path
+std::wstring getCurrentFilePath()
+{
+  std::array<wchar_t, MAX_PATH> currentFilePath;
+  ::SendMessage(nppData._nppHandle, NPPM_GETFULLCURRENTPATH, MAX_PATH, reinterpret_cast<LPARAM>(currentFilePath.data()));
+  std::wstring sCurrentFilePath(currentFilePath.data());
+  sCurrentFilePath.shrink_to_fit();
+  // lower case for consistent paths - this is windows
+  std::transform(sCurrentFilePath.begin(), sCurrentFilePath.end(), sCurrentFilePath.begin(), ::tolower);
+  return sCurrentFilePath;
 }
