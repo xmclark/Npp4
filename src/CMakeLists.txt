@@ -44,6 +44,7 @@ set(Npp4_SOURCE_FILES
 set(Npp4_HEADER_FILES
   ./menuCmdID.h
   ./Notepad_plus_msgs.h
+  ./json.hpp
   ./PluginDefinition.h
   ./PluginInterface.h
   # ./Resource.h
