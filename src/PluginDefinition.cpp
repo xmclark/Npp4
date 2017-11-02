@@ -61,18 +61,23 @@ void pluginCleanUp()
 void commandMenuInit()
 {
 
-    //--------------------------------------------//
-    //-- STEP 3. CUSTOMIZE YOUR PLUGIN COMMANDS --//
-    //--------------------------------------------//
-    // with function :
-    // setCommand(int index,                      // zero based number to indicate the order of command
-    //            TCHAR *commandName,             // the command name that you want to see in plugin menu
-    //            PFUNCPLUGINCMD functionPointer, // the symbol of function (function pointer) associated with this command. The body should be defined below. See Step 4.
-    //            ShortcutKey *shortcut,          // optional. Define a shortcut to trigger this command
-    //            bool check0nInit                // optional. Make this menu item be checked visually
-    //            );
-    setCommand(0, TEXT("Hello Notepad++"), hello, NULL, false);
-    setCommand(1, TEXT("Hello (with dialog)"), helloDlg, NULL, false);
+  //--------------------------------------------//
+  //-- STEP 3. CUSTOMIZE YOUR PLUGIN COMMANDS --//
+  //--------------------------------------------//
+  // with function :
+  // setCommand(int index,                      // zero based number to indicate the order of command
+  //            TCHAR *commandName,             // the command name that you want to see in plugin menu
+  //            PFUNCPLUGINCMD functionPointer, // the symbol of function (function pointer) associated with this command. The body should be defined below. See Step 4.
+  //            ShortcutKey *shortcut,          // optional. Define a shortcut to trigger this command
+  //            bool check0nInit                // optional. Make this menu item be checked visually
+  //            );
+  setCommand(0, L"Open P4 Config File", openConfig, NULL, false);
+  setCommand(1, L"Reload P4 Config", reloadConfig, NULL, false);
+
+
+  auto configPath = getConfigPath();
+  g_pConfig = std::make_unique<p4::P4Config>(configPath);
+  g_pConfig->load();
 }
 
 //
