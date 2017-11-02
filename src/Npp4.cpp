@@ -23,6 +23,7 @@
 // SOFTWARE.
 
 #include "PluginDefinition.h"
+#include <iostream>
 #include <memory>
 #include "P4Config.h"
 
@@ -77,6 +78,13 @@ extern "C" __declspec(dllexport) FuncItem * getFuncsArray(int *nbF)
 
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
 {
+  switch (notifyCode->nmhdr.code) {
+  case NPPN_FILESAVED:
+    onFileSaved();
+    break;
+  default:
+    break;
+  }
 }
 
 

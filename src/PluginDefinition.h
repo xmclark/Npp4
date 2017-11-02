@@ -81,6 +81,7 @@ bool openDocument(std::wstring& path);
 //
 void openConfig();
 void reloadConfig();
+void onFileSaved();
 std::wstring getCurrentFilePath();
 
 #endif //PLUGINDEFINITION_H
