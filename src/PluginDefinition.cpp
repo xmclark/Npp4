@@ -110,6 +110,18 @@ bool setCommand(size_t index, TCHAR *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey 
 //-- STEP 4. DEFINE YOUR ASSOCIATED FUNCTIONS --//
 //----------------------------------------------//
 
+// 
+// get the config path
+std::wstring getConfigPath()
+{
+    wchar_t configDir[MAX_PATH];
+    ::SendMessage(nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)configDir);
+    std::wstring configPath = configDir;
+    configPath.shrink_to_fit();
+    configPath += L"\\";
+    std::transform(configPath.begin(), configPath.end(), configPath.begin(), ::tolower);
+    return configPath;
+}
 
 void openNewDocument()
 {
