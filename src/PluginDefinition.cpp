@@ -90,9 +90,6 @@ void commandMenuInit()
 void commandMenuCleanUp()
 {
 	// Don't forget to deallocate your shortcut here
-  int x;
-  (void)x;
-  auto handle = nppData._nppHandle;
 }
 
 
