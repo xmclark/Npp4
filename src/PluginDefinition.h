@@ -36,7 +36,7 @@
 //-------------------------------------//
 // Here define your plugin name
 //
-const TCHAR NPP_PLUGIN_NAME[] = TEXT("Npp4 - Perforce for Notepad++");
+const wchar_t NPP_PLUGIN_NAME[] = L"Npp4";
 
 //-----------------------------------------------//
 //-- STEP 2. DEFINE YOUR PLUGIN COMMAND NUMBER --//
