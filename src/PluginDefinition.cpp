@@ -24,6 +24,8 @@
 
 #include "PluginDefinition.h"
 #include "menuCmdID.h"
+#include "P4Config.h"
+#include <memory>
 
 //
 // The plugin data that Notepad++ needs
@@ -34,6 +36,9 @@ FuncItem funcItem[nbFunc];
 // The data of Notepad++ that you can use in your plugin commands
 //
 NppData nppData;
+
+
+std::unique_ptr<p4::P4Config> g_pConfig;
 
 //
 // Initialize your plugin data here
