@@ -73,6 +73,7 @@ void commandMenuCleanUp();
 bool setCommand(size_t index, wchar_t *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey *sk = NULL, bool check0nInit = false);
 
 std::wstring getConfigPath();
+bool openDocument(std::wstring& path);
 
 //
 // Your plugin command functions

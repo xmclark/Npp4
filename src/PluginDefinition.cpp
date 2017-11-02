@@ -123,6 +123,19 @@ std::wstring getConfigPath()
     return configPath;
 }
 
+bool openDocument(std::wstring& path)
+{
+  std::wifstream inputStream(path);
+  if(inputStream.good()) {
+    ::SendMessage(nppData._nppHandle, NPPM_DOOPEN, 0, reinterpret_cast<LPARAM>(path.c_str()));
+    return true;
+  }
+  else {
+    // error, file does not exist
+    return false;
+  }
+}
+
 void openNewDocument()
 {
     // Open a new document
