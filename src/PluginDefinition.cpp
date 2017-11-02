@@ -146,13 +146,10 @@ void writeToCurrentDocument()
     ::SendMessage(curScintilla, SCI_SETTEXT, 0, (LPARAM)"Hello, Notepad++!");
 }
 
-void hello()
 {
   openNewDocument();
   writeToCurrentDocument();
 }
 
-void helloDlg()
 {
-    ::MessageBox(NULL, TEXT("Hello, Notepad++!"), TEXT("Notepad++ Plugin Template"), MB_OK);
 }

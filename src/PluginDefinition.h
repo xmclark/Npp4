@@ -77,7 +77,5 @@ std::wstring getConfigPath();
 //
 // Your plugin command functions
 //
-void hello();
-void helloDlg();
 
 #endif //PLUGINDEFINITION_H
