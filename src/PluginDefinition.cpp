@@ -52,6 +52,7 @@ void pluginInit(HANDLE hModule)
 //
 void pluginCleanUp()
 {
+    g_pConfig->save();
 }
 
 //
