@@ -26,6 +26,10 @@
 #include "menuCmdID.h"
 #include "P4Config.h"
 #include <memory>
+#include <iostream>
+#include <fstream>
+#include <array>
+#include <algorithm>
 
 //
 // The plugin data that Notepad++ needs
@@ -164,12 +168,38 @@ void writeToCurrentDocument()
     ::SendMessage(curScintilla, SCI_SETTEXT, 0, (LPARAM)"Hello, Notepad++!");
 }
 
+// open the plugins config file
+void openConfig()
 {
-  openNewDocument();
-  writeToCurrentDocument();
+  auto npp4ConfigPath = g_pConfig->getConfigFilePath();
+  bool fileExists = openDocument(npp4ConfigPath);
+  (void)fileExists;
 }
 
+// reload the configuration using P4Config
+void reloadConfig()
 {
+  bool loaded = g_pConfig->load();
+  if (!loaded) {
+    // open the config file
+    auto configPath = g_pConfig->getConfigFilePath();
+    openDocument(configPath);
+    // show a message box
+    ::MessageBox(NULL, TEXT("JSON Error"), TEXT("Failed to parse JSON. Please modify P4 config file."), MB_OK);
+  }
+}
+
+// A file has just been saved
+void onFileSaved()
+{
+  auto currentFilePath = getCurrentFilePath();
+  auto configPath = g_pConfig->getConfigFilePath();
+  if (currentFilePath == configPath) {
+    // config file has just been saved
+    reloadConfig();
+  }
+}
+
 // get the current file path
 std::wstring getCurrentFilePath()
 {

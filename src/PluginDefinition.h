@@ -29,6 +29,7 @@
 // All difinitions of plugin interface
 //
 #include "PluginInterface.h"
+#include <string>
 
 //-------------------------------------//
 //-- STEP 1. DEFINE YOUR PLUGIN NAME --//
@@ -78,6 +79,8 @@ bool openDocument(std::wstring& path);
 //
 // Your plugin command functions
 //
+void openConfig();
+void reloadConfig();
 std::wstring getCurrentFilePath();
 
 #endif //PLUGINDEFINITION_H
