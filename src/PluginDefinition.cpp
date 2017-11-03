@@ -182,7 +182,7 @@ void reloadConfig()
     auto configPath = g_pConfig->getConfigFilePath();
     openDocument(configPath);
     // show a message box
-    ::MessageBox(NULL, TEXT("JSON Error"), TEXT("Failed to parse JSON. Please modify P4 config file."), MB_OK);
+    ::MessageBox(NULL, L"Failed to parse JSON. Please fix P4 config file or reset it.", L"JSON Error", MB_OK);
   }
 }
 
