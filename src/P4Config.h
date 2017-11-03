@@ -24,6 +24,7 @@ public:
 
   const std::wstring& getConfigFilePath();
 
+  void resetToDefault();
   bool load();
   void save();
 

@@ -37,6 +37,25 @@ const std::wstring& p4::P4Config::getConfigFilePath()
   return m_configFilePath;
 }
 
+// reset the configuration file back to default values
+void p4::P4Config::resetToDefault()
+{
+  m_user = "user";
+  m_password = "password";
+  m_workspace = "workspace";
+  m_port = "perforce:1666";
+
+  using nlohmann::json;
+  json jConfig;
+  jConfig["user"] = "user";
+  jConfig["password"] = "password";
+  jConfig["workspace"] = "workspace";
+  jConfig["port"] = "perforce:1666";
+  std::ofstream outputStream(m_configFilePath);
+  outputStream << std::setw(4) << jConfig;
+  outputStream.close();
+}
+
 // returns true when the config file is loaded correctly
 // returns false when there is an input stream error
 bool p4::P4Config::load()
@@ -79,14 +98,7 @@ bool p4::P4Config::load()
   }
   else {
     inputStream.close();
-    json jConfig;
-    jConfig["user"] = "user";
-    jConfig["password"] = "password";
-    jConfig["workspace"] = "workspace";
-    jConfig["port"] = "perforce:1666";
-    std::ofstream outputStream(m_configFilePath);
-    outputStream << std::setw(4) << jConfig;
-    outputStream.close();
+    resetToDefault();
   }
   return true;
 }
