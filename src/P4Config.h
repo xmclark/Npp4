@@ -4,6 +4,11 @@
 
 namespace p4 {
 
+// A configuration class for a P4 client
+// This class maintains reference to the config file 
+// The class unserializes json and stores the config in memory for use by a p4 client
+// The class can easily serialize when application has been closed
+
 class P4Config {
 public:
 
