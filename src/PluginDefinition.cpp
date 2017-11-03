@@ -42,6 +42,8 @@ FuncItem funcItem[nbFunc];
 NppData nppData;
 
 
+// global instance of the P4Config
+// any object can easily consume this data
 std::unique_ptr<p4::P4Config> g_pConfig;
 
 //
