@@ -29,7 +29,6 @@
 
 extern FuncItem funcItem[nbFunc];
 extern NppData nppData;
-extern std::unique_ptr<p4::P4Config> g_pConfig;
 
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
