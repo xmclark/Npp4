@@ -24,6 +24,12 @@
 
 #include "PluginDefinition.h"
 #include "menuCmdID.h"
+#include "P4Config.h"
+#include <memory>
+#include <iostream>
+#include <fstream>
+#include <array>
+#include <algorithm>
 
 //
 // The plugin data that Notepad++ needs
@@ -34,6 +40,11 @@ FuncItem funcItem[nbFunc];
 // The data of Notepad++ that you can use in your plugin commands
 //
 NppData nppData;
+
+
+// global instance of the P4Config
+// any object can easily consume this data
+std::unique_ptr<p4::P4Config> g_pConfig;
 
 //
 // Initialize your plugin data here
@@ -47,6 +58,7 @@ void pluginInit(HANDLE hModule)
 //
 void pluginCleanUp()
 {
+    g_pConfig->save();
 }
 
 //
@@ -55,18 +67,24 @@ void pluginCleanUp()
 void commandMenuInit()
 {
 
-    //--------------------------------------------//
-    //-- STEP 3. CUSTOMIZE YOUR PLUGIN COMMANDS --//
-    //--------------------------------------------//
-    // with function :
-    // setCommand(int index,                      // zero based number to indicate the order of command
-    //            TCHAR *commandName,             // the command name that you want to see in plugin menu
-    //            PFUNCPLUGINCMD functionPointer, // the symbol of function (function pointer) associated with this command. The body should be defined below. See Step 4.
-    //            ShortcutKey *shortcut,          // optional. Define a shortcut to trigger this command
-    //            bool check0nInit                // optional. Make this menu item be checked visually
-    //            );
-    setCommand(0, TEXT("Hello Notepad++"), hello, NULL, false);
-    setCommand(1, TEXT("Hello (with dialog)"), helloDlg, NULL, false);
+  //--------------------------------------------//
+  //-- STEP 3. CUSTOMIZE YOUR PLUGIN COMMANDS --//
+  //--------------------------------------------//
+  // with function :
+  // setCommand(int index,                      // zero based number to indicate the order of command
+  //            TCHAR *commandName,             // the command name that you want to see in plugin menu
+  //            PFUNCPLUGINCMD functionPointer, // the symbol of function (function pointer) associated with this command. The body should be defined below. See Step 4.
+  //            ShortcutKey *shortcut,          // optional. Define a shortcut to trigger this command
+  //            bool check0nInit                // optional. Make this menu item be checked visually
+  //            );
+  setCommand(0, L"Open P4 Config File", openConfig, NULL, false);
+  setCommand(1, L"Reload P4 Config", reloadConfig, NULL, false);
+  setCommand(2, L"Reset P4 Config File to Default", resetConfig, NULL, false);
+
+
+  auto configPath = getConfigPath();
+  g_pConfig = std::make_unique<p4::P4Config>(configPath);
+  g_pConfig->load();
 }
 
 //
@@ -75,16 +93,13 @@ void commandMenuInit()
 void commandMenuCleanUp()
 {
 	// Don't forget to deallocate your shortcut here
-  int x;
-  (void)x;
-  auto handle = nppData._nppHandle;
 }
 
 
 //
 // This function help you to initialize your plugin commands
 //
-bool setCommand(size_t index, TCHAR *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey *sk, bool check0nInit) 
+bool setCommand(size_t index, wchar_t *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey *sk, bool check0nInit) 
 {
     if (index >= nbFunc)
         return false;
@@ -104,6 +119,31 @@ bool setCommand(size_t index, TCHAR *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey 
 //-- STEP 4. DEFINE YOUR ASSOCIATED FUNCTIONS --//
 //----------------------------------------------//
 
+// 
+// get the config path
+std::wstring getConfigPath()
+{
+    wchar_t configDir[MAX_PATH];
+    ::SendMessage(nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)configDir);
+    std::wstring configPath = configDir;
+    configPath.shrink_to_fit();
+    configPath += L"\\";
+    std::transform(configPath.begin(), configPath.end(), configPath.begin(), ::tolower);
+    return configPath;
+}
+
+bool openDocument(std::wstring& path)
+{
+  std::wifstream inputStream(path);
+  if(inputStream.good()) {
+    ::SendMessage(nppData._nppHandle, NPPM_DOOPEN, 0, reinterpret_cast<LPARAM>(path.c_str()));
+    return true;
+  }
+  else {
+    // error, file does not exist
+    return false;
+  }
+}
 
 void openNewDocument()
 {
@@ -128,13 +168,52 @@ void writeToCurrentDocument()
     ::SendMessage(curScintilla, SCI_SETTEXT, 0, (LPARAM)"Hello, Notepad++!");
 }
 
-void hello()
+// resets the config file to default
+void resetConfig()
 {
-  openNewDocument();
-  writeToCurrentDocument();
+  g_pConfig->resetToDefault();
 }
 
-void helloDlg()
+// open the plugins config file
+void openConfig()
 {
-    ::MessageBox(NULL, TEXT("Hello, Notepad++!"), TEXT("Notepad++ Plugin Template"), MB_OK);
+  auto npp4ConfigPath = g_pConfig->getConfigFilePath();
+  bool fileExists = openDocument(npp4ConfigPath);
+  (void)fileExists;
+}
+
+// reload the configuration using P4Config
+void reloadConfig()
+{
+  bool loaded = g_pConfig->load();
+  if (!loaded) {
+    // open the config file
+    auto configPath = g_pConfig->getConfigFilePath();
+    openDocument(configPath);
+    // show a message box
+    ::MessageBox(NULL, L"Failed to parse JSON. Please fix P4 config file or reset it.", L"JSON Error", MB_OK);
+  }
+}
+
+// A file has just been saved
+void onFileSaved()
+{
+  auto currentFilePath = getCurrentFilePath();
+  auto configPath = g_pConfig->getConfigFilePath();
+  if (currentFilePath == configPath) {
+    // config file has just been saved
+    reloadConfig();
+  }
+}
+
+// get the current file path
+std::wstring getCurrentFilePath()
+{
+  std::array<wchar_t, MAX_PATH> currentFilePath;
+  ::SendMessage(nppData._nppHandle, NPPM_GETFULLCURRENTPATH, MAX_PATH, reinterpret_cast<LPARAM>(currentFilePath.data()));
+  std::wstring sCurrentFilePath(currentFilePath.data());
+  sCurrentFilePath.shrink_to_fit();
+  // lower case for consistent paths - this is windows
+  std::transform(sCurrentFilePath.begin(), sCurrentFilePath.end(), sCurrentFilePath.begin(), ::tolower);
+  return sCurrentFilePath;
 }

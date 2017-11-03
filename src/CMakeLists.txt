@@ -37,6 +37,7 @@ endif(MSVC)
 
 # section: source files
 set(Npp4_SOURCE_FILES
+  ./P4Config.cpp
   ./Npp4.cpp
   ./PluginDefinition.cpp)
 
@@ -44,6 +45,8 @@ set(Npp4_SOURCE_FILES
 set(Npp4_HEADER_FILES
   ./menuCmdID.h
   ./Notepad_plus_msgs.h
+  ./json.hpp
+  ./P4Config.h
   ./PluginDefinition.h
   ./PluginInterface.h
   # ./Resource.h
@@ -81,3 +84,15 @@ set_target_properties(Npp4_unicode PROPERTIES
 target_link_libraries(Npp4_unicode Shlwapi)
 # target_link_libraries(Npp4_unicode pcre)
 target_link_libraries(Npp4_unicode ws2_32) 
+
+add_custom_command(TARGET Npp4_unicode POST_BUILD 
+COMMAND "${CMAKE_COMMAND}" -E copy 
+   "$<TARGET_FILE:Npp4_unicode>"
+   "${PROJECT_BINARY_DIR}/bin/unicode/$<CONFIGURATION>/Plugins/$<TARGET_FILE_NAME:Npp4_unicode>" 
+COMMENT "Copying to output directory")
+
+add_custom_command(TARGET Npp4_unicode POST_BUILD 
+COMMAND "${CMAKE_COMMAND}" -E copy 
+   "$<TARGET_PDB_FILE:Npp4_unicode>"
+   "${PROJECT_BINARY_DIR}/bin/unicode/$<CONFIGURATION>/Plugins/$<TARGET_PDB_FILE_NAME:Npp4_unicode>" 
+COMMENT "Copying to output directory")
