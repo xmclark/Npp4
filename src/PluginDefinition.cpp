@@ -77,6 +77,7 @@ void commandMenuInit()
   //            );
   setCommand(0, L"Open P4 Config File", openConfig, NULL, false);
   setCommand(1, L"Reload P4 Config", reloadConfig, NULL, false);
+  setCommand(2, L"Reset P4 Config File to Default", resetConfig, NULL, false);
 
 
   auto configPath = getConfigPath();
@@ -163,6 +164,12 @@ void writeToCurrentDocument()
 
     // Scintilla control has no Unicode mode, so we use (char *) here
     ::SendMessage(curScintilla, SCI_SETTEXT, 0, (LPARAM)"Hello, Notepad++!");
+}
+
+// resets the config file to default
+void resetConfig()
+{
+  g_pConfig->resetToDefault();
 }
 
 // open the plugins config file

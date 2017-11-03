@@ -44,7 +44,7 @@ const wchar_t NPP_PLUGIN_NAME[] = L"Npp4";
 //
 // Here define the number of your plugin commands
 //
-const int nbFunc = 2;
+const int nbFunc = 3;
 
 //
 // Initialization of your plugin data
@@ -79,6 +79,7 @@ bool openDocument(std::wstring& path);
 //
 // Your plugin command functions
 //
+void resetConfig();
 void openConfig();
 void reloadConfig();
 void onFileSaved();
