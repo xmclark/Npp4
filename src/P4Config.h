@@ -4,12 +4,6 @@
 
 namespace p4 {
 
-enum class LoadResultEnum {
-
-
-
-};
-
 class P4Config {
 public:
 
