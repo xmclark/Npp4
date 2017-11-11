@@ -6,6 +6,8 @@ A Perforce plugin for Notepad++.
 
 Currently, the only method for installation is by building from source. The plugin will be added to the notepad++ plugin manager when it is prime time.
 
+The project is only built in the Unicode configuration.
+
 ### Dependencies
 
 Current dependencies are:
