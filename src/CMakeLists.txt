@@ -37,8 +37,9 @@ endif(MSVC)
 
 # section: source files
 set(Npp4_SOURCE_FILES
-  ./P4Config.cpp
   ./Npp4.cpp
+  ./P4Config.cpp
+  ./RunCommand.cpp
   ./PluginDefinition.cpp)
 
 # section: header files
@@ -47,11 +48,13 @@ set(Npp4_HEADER_FILES
   ./Notepad_plus_msgs.h
   ./json.hpp
   ./P4Config.h
+  ./RunCommand.h
   ./PluginDefinition.h
   ./PluginInterface.h
-  # ./Resource.h
   ./Scintilla.h
   )
+
+set(P4_DIR "${CMAKE_CURRENT_SOURCE_DIR}/p4")
 
 # set the current directory as an include directory
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -82,8 +85,19 @@ set_target_properties(Npp4_unicode PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib/unicode)
 
 target_link_libraries(Npp4_unicode Shlwapi)
-# target_link_libraries(Npp4_unicode pcre)
 target_link_libraries(Npp4_unicode ws2_32) 
+
+# debug p4 libs
+target_link_libraries(Npp4_unicode debug ${P4_DIR}/debug/libclient.lib) 
+target_link_libraries(Npp4_unicode debug ${P4_DIR}/debug/libp4sslstub.lib) 
+target_link_libraries(Npp4_unicode debug ${P4_DIR}/debug/librpc.lib) 
+target_link_libraries(Npp4_unicode debug ${P4_DIR}/debug/libsupp.lib) 
+
+# release p4 libs
+target_link_libraries(Npp4_unicode ${P4_DIR}/release/libclient.lib) 
+target_link_libraries(Npp4_unicode ${P4_DIR}/release/libp4sslstub.lib) 
+target_link_libraries(Npp4_unicode ${P4_DIR}/release/librpc.lib) 
+target_link_libraries(Npp4_unicode ${P4_DIR}/release/libsupp.lib) 
 
 add_custom_command(TARGET Npp4_unicode POST_BUILD 
 COMMAND "${CMAKE_COMMAND}" -E copy 

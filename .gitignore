@@ -16,3 +16,4 @@ CMakeFiles/
 .vs/
 */src/Npp4_unicode.dir/
 */src/Npp4_ansi.dir/
+*.swp
