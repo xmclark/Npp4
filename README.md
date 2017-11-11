@@ -6,6 +6,17 @@ A Perforce plugin for Notepad++.
 
 Currently, the only method for installation is by building from source. The plugin will be added to the notepad++ plugin manager when it is prime time.
 
+### Dependencies
+
+Current dependencies are:
+
+1. [nlohmann/json][]
+2. [P4API][]
+
+No work is required as all headers and binaries are currently checked into git. In the future, these dependencies should be collected by CMake (if anybody knows how to do this, please tell me). 
+
+The P4API is on version 2016.2. It would be on a later version, but the Perforce people have a bug in their build system for the API causing certain stub libraries to not be copied to the output. 
+
 ### Install From Source
 
 Building requires [cmake][] and [Microsoft Visual Studio][].
@@ -20,5 +31,7 @@ Building requires [cmake][] and [Microsoft Visual Studio][].
 
 Feel free to use the github tracker. Pull requests are welcome.
 
+[nlohmann/json]: https://github.com/nlohmann/json
+[P4API]: https://www.perforce.com/downloads/helix-core-c/c-api
 [cmake]: https://www.cmake.org
 [Microsoft Visual Studio]: https://www.visualstudio.com
