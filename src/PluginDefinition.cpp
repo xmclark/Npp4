@@ -25,8 +25,7 @@
 #include "PluginDefinition.h"
 #include "menuCmdID.h"
 #include "P4Config.h"
-#include "P4CheckoutOperation.h"
-#include "P4Client.h"
+#include "RunCommand.h"
 #include <memory>
 #include <iostream>
 #include <fstream>
