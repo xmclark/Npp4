@@ -37,8 +37,9 @@ endif(MSVC)
 
 # section: source files
 set(Npp4_SOURCE_FILES
-  ./P4Config.cpp
   ./Npp4.cpp
+  ./P4Config.cpp
+  ./RunCommand.cpp
   ./PluginDefinition.cpp)
 
 # section: header files
@@ -47,9 +48,9 @@ set(Npp4_HEADER_FILES
   ./Notepad_plus_msgs.h
   ./json.hpp
   ./P4Config.h
+  ./RunCommand.h
   ./PluginDefinition.h
   ./PluginInterface.h
-  # ./Resource.h
   ./Scintilla.h
   )
 
