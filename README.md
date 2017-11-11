@@ -19,3 +19,6 @@ Building requires [cmake][] and [Microsoft Visual Studio][].
 ## Bugs and Feature Requests
 
 Feel free to use the github tracker. Pull requests are welcome.
+
+[cmake]: https://www.cmake.org
+[Microsoft Visual Studio]: https://www.visualstudio.com
