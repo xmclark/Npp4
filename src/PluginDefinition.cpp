@@ -25,11 +25,14 @@
 #include "PluginDefinition.h"
 #include "menuCmdID.h"
 #include "P4Config.h"
+#include "P4CheckoutOperation.h"
+#include "P4Client.h"
 #include <memory>
 #include <iostream>
 #include <fstream>
 #include <array>
 #include <algorithm>
+#include "Windows.h"
 
 //
 // The plugin data that Notepad++ needs
@@ -80,6 +83,7 @@ void commandMenuInit()
   setCommand(0, L"Open P4 Config File", openConfig, NULL, false);
   setCommand(1, L"Reload P4 Config", reloadConfig, NULL, false);
   setCommand(2, L"Reset P4 Config File to Default", resetConfig, NULL, false);
+  setCommand(3, L"Checkout Current File", checkoutOpenedFile, NULL, false);
 
 
   auto configPath = getConfigPath();
@@ -216,4 +220,17 @@ std::wstring getCurrentFilePath()
   // lower case for consistent paths - this is windows
   std::transform(sCurrentFilePath.begin(), sCurrentFilePath.end(), sCurrentFilePath.begin(), ::tolower);
   return sCurrentFilePath;
+}
+
+void checkoutOpenedFile()
+{
+  auto wsCurrentFilePath = getCurrentFilePath();
+  char* szTo = new char[wsCurrentFilePath.length() + 1];
+  szTo[wsCurrentFilePath.size()] = '\0';
+  WideCharToMultiByte(CP_ACP, 0, wsCurrentFilePath.c_str(), -1, szTo, static_cast<int>(wsCurrentFilePath.size()), NULL, NULL);
+  std::string sCurrentFilePath(szTo);
+
+  p4::runCommand(g_pConfig, [&sCurrentFilePath]() {
+    return std::make_pair("edit", std::vector<std::string>{"-c", "default", sCurrentFilePath});
+  });
 }
