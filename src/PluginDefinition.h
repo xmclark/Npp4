@@ -44,7 +44,7 @@ const wchar_t NPP_PLUGIN_NAME[] = L"Npp4";
 //
 // Here define the number of your plugin commands
 //
-const int nbFunc = 4;
+const int nbFunc = 5;
 
 //
 // Initialization of your plugin data
@@ -87,5 +87,6 @@ std::wstring getCurrentFilePath();
 
 // p4 commands
 void checkoutOpenedFile();
+void revertOpenedFile();
 
 #endif //PLUGINDEFINITION_H

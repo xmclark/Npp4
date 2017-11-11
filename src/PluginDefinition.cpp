@@ -83,6 +83,7 @@ void commandMenuInit()
   setCommand(1, L"Reload P4 Config", reloadConfig, NULL, false);
   setCommand(2, L"Reset P4 Config File to Default", resetConfig, NULL, false);
   setCommand(3, L"Checkout Current File", checkoutOpenedFile, NULL, false);
+  setCommand(4, L"Revert Current File", revertOpenedFile, NULL, false);
 
 
   auto configPath = getConfigPath();
@@ -221,6 +222,7 @@ std::wstring getCurrentFilePath()
   return sCurrentFilePath;
 }
 
+// add the currently opened file to the default changelist 
 void checkoutOpenedFile()
 {
   auto wsCurrentFilePath = getCurrentFilePath();
@@ -231,5 +233,19 @@ void checkoutOpenedFile()
 
   p4::runCommand(g_pConfig, [&sCurrentFilePath]() {
     return std::make_pair("edit", std::vector<std::string>{"-c", "default", sCurrentFilePath});
+  });
+}
+
+// revert the currently opened file to your depot
+void revertOpenedFile()
+{
+  auto wsCurrentFilePath = getCurrentFilePath();
+  char* szTo = new char[wsCurrentFilePath.length() + 1];
+  szTo[wsCurrentFilePath.size()] = '\0';
+  WideCharToMultiByte(CP_ACP, 0, wsCurrentFilePath.c_str(), -1, szTo, static_cast<int>(wsCurrentFilePath.size()), NULL, NULL);
+  std::string sCurrentFilePath(szTo);
+
+  p4::runCommand(g_pConfig, [&sCurrentFilePath]() {
+    return std::make_pair("revert", std::vector<std::string>{"-a", "-c", "default", sCurrentFilePath});
   });
 }
