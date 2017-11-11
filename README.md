@@ -2,6 +2,13 @@
 
 A Perforce plugin for Notepad++.
 
+## Current Features:
+
+1. Load/Save Perforce connection configuration.
+2. Add opened file to default changelist.
+3. Revert opened file.
+4. Checkout opened file in default changelist.
+
 ## Installation
 
 Currently, the only method for installation is by building from source. The plugin will be added to the notepad++ plugin manager when it is prime time.
